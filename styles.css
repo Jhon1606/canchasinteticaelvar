@@ -1,0 +1,54 @@
+ /* Estilos personalizados */
+ body {
+    font-family: Arial, sans-serif;
+}
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar a {
+    color: #333 !important;
+    font-weight: bold;
+}
+.navbar a:hover {
+    color: #007bff !important;
+}
+.reserva {
+    background-image: url('cancha.jpeg'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    padding: 4rem 0;
+    text-align: center;
+}
+.reserva-content {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 8px;
+    display: inline-block;
+}
+.reserva .btn-primary {
+    background-color: #ffcc00;
+    border: none;
+    color: #333;
+    font-weight: bold;
+}
+.contacto {
+    padding: 4rem 0;
+}
+.contacto h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+.form-control, .btn-submit {
+    border-radius: 5px;
+}
+.btn-submit {
+    background-color: #ffcc00;
+    color: #333;
+    font-weight: bold;
+    border: none;
+}
+.btn-submit:hover {
+    background-color: #ffd633;
+}
