@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cancha sintética El Var</title>
+    <title>Cancha Sintética El Var</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css">
@@ -27,23 +27,21 @@
     <!-- Navegación -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#"><img src="escudoelvar.jpg" alt="Logo" width="50"></a>
+            <a class="navbar-brand" href="#"><img src="public/img/escudoelvar.jpg" alt="Logo" width="50"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#loginModal">Admin</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Reservas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Eventos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Sección de Reservas -->
-    <section class="text-white text-center bg-dark" style="background-image: url('cancha.jpeg'); background-size: cover; background-position: center; padding: 4rem 0;">
+    <section class="text-white text-center bg-dark" style="background-image: url('public/img/cancha.jpeg'); background-size: cover; background-position: center; padding: 4rem 0;">
         <div class="container">
             <div class="p-4 rounded">
                 <h1 class="display-4"><strong>Reservar Cancha</strong></h1>
@@ -115,7 +113,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="Controlador/add.php" method="post">
                         <h2 class="h6">Información del cliente</h2>
                         <p class="mt-1 text-muted">Rellenar todos los campos del formulario para hacer la reserva</p>
 
@@ -154,6 +152,9 @@
                                 </select>
                             </div>
 
+                            <!-- Campo oculto para la hora seleccionada -->
+                            <input type="text" id="selectedHour" name="selectedHour">
+
                             <div class="col-12">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <button id="prevDay" class="btn btn-outline-secondary">←</button>
@@ -184,6 +185,47 @@
         </div>
     </div>
 
+    <!-- Modal de Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            
+            <!-- Logotipo centrado -->
+            <div class="modal-header d-flex justify-content-center align-items-center">
+                <img src="public/img/escudoelvar.jpg" alt="escudo var" class="img-fluid" style="max-width: 60px;">
+                <button type="button" class="btn-close btn-close-black position-absolute end-0 me-3" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+
+            <!-- Encabezado del modal con ícono y título -->
+            <div class="text-center my-3 text-black">
+                <h5 class="modal-title mx-auto" id="loginModalLabel">
+                    <i class="fa fa-user-circle me-2"></i>Iniciar Sesión
+                </h5>
+            </div>
+
+            <!-- Cuerpo del modal con el formulario -->
+            <div class="modal-body p-4">
+                <form id="loginForm" method="post" action="tu_ruta_de_autenticacion.php">
+                <div class="mb-3">
+                    <label for="email" class="form-label"><i class="fa fa-user me-2"></i> Usuario</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Ingresa tu usuario" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label"><i class="fa fa-lock me-2"></i> Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2">Iniciar Sesión</button>
+                </form>
+            </div>
+
+            <!-- Pie del modal con un enlace para recuperación de contraseña -->
+            <div class="modal-footer justify-content-center">
+                <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
+            </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Pie de Página -->
     <footer class="text-white py-4" style="background-color: #28a745;">
@@ -192,7 +234,7 @@
                 <div class="col-lg-4 mb-3">
                     <h5>Bienvenido</h5>
                     <p>Alquila nuestra cancha y disfruta del fútbol.</p>
-                    <div class="footer-social-icons d-flex gap-2">
+                    <div class="footer-social-icons d-flex gap-2 col-6 mx-auto">
                         <a href="#" class="btn-circle bg-dark text-white d-flex align-items-center justify-content-center"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="btn-circle bg-dark text-white d-flex align-items-center justify-content-center"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="btn-circle bg-dark text-white d-flex align-items-center justify-content-center"><i class="fab fa-tiktok"></i></a>
@@ -222,63 +264,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const hours = [...Array(13).keys()].map(i => {
-            const startHour = i + 9;
-            const endHour = startHour + 1;
-            const formatHour = hour => {
-                if (hour < 12) return `${hour}AM`;
-                if (hour === 12) return `12PM`;
-                return `${hour - 12}PM`;
-            };
-            return `${formatHour(startHour)} - ${formatHour(endHour)}`;
-        });
-
-        let currentDate = new Date();
-
-        function renderHours() {
-            const hourRows = document.getElementById('hourRows');
-            hourRows.innerHTML = ''; // Limpiar las horas
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateString = currentDate.toLocaleDateString('es-ES', options); // Formato en español
-
-            hours.forEach(hour => {
-                const row = document.createElement('tr');
-                const timeCell = document.createElement('td');
-                timeCell.className = 'text-center';
-                timeCell.textContent = hour;
-
-                const reserveCell = document.createElement('td');
-                reserveCell.className = 'text-center';
-                const reserveButton = document.createElement('button');
-                reserveButton.className = 'btn btn-warning btn-sm';
-                reserveButton.textContent = 'Reservar';
-                reserveButton.onclick = () => alert(`Reserva realizada para ${hour} del ${dateString}`);
-
-                reserveCell.appendChild(reserveButton);
-                row.appendChild(timeCell);
-                row.appendChild(reserveCell);
-                hourRows.appendChild(row);
-            }
-        );
-
-        document.getElementById('currentDate').textContent = dateString; // Fecha en español
-        document.getElementById('dayOfWeek').textContent = currentDate.toLocaleDateString('es-ES', { weekday: 'long' });
-        }
-
-
-        document.getElementById('prevDay').addEventListener('click', () => {
-            currentDate.setDate(currentDate.getDate() - 1);
-            renderHours();
-        });
-
-        document.getElementById('nextDay').addEventListener('click', () => {
-            currentDate.setDate(currentDate.getDate() + 1);
-            renderHours();
-        });
-
-        // Inicializar la tabla de horas
-        renderHours();
-    </script>
+    <script src="public/js/javascript.js"></script>
 </body>
 </html>
