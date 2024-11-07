@@ -1,5 +1,5 @@
 <?php
-class Usuarios
+class Canchas
 {
   private $pdo;
 
@@ -8,9 +8,9 @@ class Usuarios
     $this->pdo = $pdo;
   }
 
-  public function crear($nombre)
+  public function crearCancha($nombre)
   {
-    $sql = "INSERT INTO canchas (nombre, fecha_creacion) VALUES (:nombre, :fecha_creacion)";
+    $sql = "INSERT INTO canchas (nombre, fecha_registro) VALUES (:nombre, :fecha_registro)";
     $stmt = $this->pdo->prepare($sql);
     $fecha_registro = date('Y-m-d H:i:s');
     $stmt->execute([
@@ -45,7 +45,7 @@ class Usuarios
   }
 
 
-  public function listar()
+  public function listarCanchas()
   {
     $sql = "SELECT * FROM canchas";
     $stmt = $this->pdo->query($sql);

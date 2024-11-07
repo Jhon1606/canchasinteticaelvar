@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ch = curl_init();
 
     // Configura las opciones de cURL
-    curl_setopt($ch, CURLOPT_URL, "http://localhost/canchasintetica/api/usuarios/addusuario.php");
+    curl_setopt($ch, CURLOPT_URL, "http://localhost/canchasintetica/api/usuarios/addUsuario.php");
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data)); // Envía los datos en formato de formulario
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

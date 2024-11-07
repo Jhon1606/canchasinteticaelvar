@@ -42,12 +42,18 @@ class Usuarios
 
   public function validarUsuario($email, $password)
   {
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    $sql = "SELECT * FROM usuarios WHERE email = :email AND password = :password";
+    $sql = "SELECT * FROM usuarios WHERE email = :email";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute(['email' => $email, 'password' => $password]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->execute(['email' => $email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($user && password_verify($password, $user['password'])) {
+        return ['status' => 'OK', 'message' => 'Usuario validado correctamente', 'user' => $user];
+    } else {
+        return ['status' => 'ERROR', 'message' => 'Email o contraseña incorrectos'];
+    }
   }
+    
 
   public function obtener($id)
   {
@@ -58,7 +64,7 @@ class Usuarios
   }
 
 
-  public function listar()
+  public function listarUsuarios()
   {
     $sql = "SELECT * FROM usuarios";
     $stmt = $this->pdo->query($sql);

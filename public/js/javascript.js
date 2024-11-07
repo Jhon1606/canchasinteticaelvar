@@ -30,7 +30,7 @@ function renderHours() {
         reserveButton.textContent = 'Agendar';
         reserveButton.onclick = () => {
         document.getElementById('selectedHour').value = `${dateString} - ${hour}`;
-            alert(`Hora seleccionada: ${hour} del ${dateString}`);
+            // alert(`Hora seleccionada: ${hour} del ${dateString}`);
         };
 
         reserveCell.appendChild(reserveButton);
@@ -58,6 +58,3 @@ document.getElementById('nextDay').addEventListener('click', () => {
 // Inicializar la tabla de horas
 renderHours();
 
-$(document).ready(function() {
-    $('#reservasTable').DataTable(); // Inicializa DataTables
-});

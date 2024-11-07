@@ -8,9 +8,10 @@ class Reservas
     $this->pdo = $pdo;
   }
 
-  public function crearReserva($nombre, $cedula, $correo, $celular, $monto, $cancha)
+  public function crearReserva($nombre, $cedula, $correo, $celular, $monto, $cancha, $fechahora_reserva, $estado)
   {
-    $sql = "INSERT INTO reservas (nombre, cedula, correo, celular, monto, cancha_id, fecha_registro) VALUES (:nombre, :cedula, :correo, :celular, :monto, :cancha_id, :fecha_registro)";
+    $sql = "INSERT INTO reservas (nombre, cedula, correo, celular, monto, cancha_id, fechahora_reserva, estado, fecha_registro) 
+    VALUES (:nombre, :cedula, :correo, :celular, :monto, :cancha_id, :fechahora_reserva, :estado, :fecha_registro)";
     $stmt = $this->pdo->prepare($sql);
     $fecha_registro = date('Y-m-d H:i:s');
     $stmt->execute([
@@ -20,6 +21,8 @@ class Reservas
       'celular' => $celular,
       'monto' => $monto,
       'cancha_id' => $cancha,
+      'fechahora_reserva' => $fechahora_reserva,
+      'estado' => $estado,
       'fecha_registro' => $fecha_registro
     ]);
     return "La reserva ha sido creada correctamente";

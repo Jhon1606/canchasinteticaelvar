@@ -1,7 +1,9 @@
 <?php
+// Archivo: Controlador/validarUsuario.php
+session_start(); // Inicia la sesión
+
 // Verifica que se ha enviado el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recoge los datos del formulario
     $data = [
         'email' => $_POST['email'],
         'password' => $_POST['password']
@@ -9,11 +11,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Inicializa cURL
     $ch = curl_init();
-
-    // Configura las opciones de cURL
     curl_setopt($ch, CURLOPT_URL, "http://localhost/canchasintetica/api/usuarios/validarUsuario.php");
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data)); // Envía los datos en formato de formulario
+    
+    // Envía los datos como JSON
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen(json_encode($data))
+    ]);
+    
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     // Ejecuta la solicitud cURL
@@ -23,12 +30,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (curl_errno($ch)) {
         echo 'Error:' . curl_error($ch);
     } else {
-        // Aquí puedes manejar la respuesta de la API
-        // Por ejemplo, redirigir al usuario a una página de confirmación
-        header("Location: ../admin.php");
+        $result = json_decode($response, true);
+        
+        // Verifica si $result es un array y tiene los índices esperados
+        if (is_array($result) && isset($result['status'])) {
+            if ($result['status'] === 'OK') {
+                // Guarda el email en la sesión
+                $_SESSION['user_email'] = $data['email'];
+                header("Location: ../View/reservas.php");
+                exit();
+            } else {
+                // Manejo de error, puedes mostrar un mensaje
+                echo "Error: " . $result['message'];
+            }
+        } else {
+            echo "Error: Respuesta del servidor no válida.";
+        }
     }
 
-    // Cierra cURL
     curl_close($ch);
 }
 ?>
