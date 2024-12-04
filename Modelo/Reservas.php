@@ -8,19 +8,22 @@ class Reservas
     $this->pdo = $pdo;
   }
 
-  public function crearReserva($nombre, $cedula, $correo, $celular, $monto, $cancha, $fechahora_reserva, $estado)
+  public function crearReserva($transaccion_id, $estado, $monto, $correo, $descripcion, $nombre, $cedula, $celular, $cancha_id, $fechahora_reserva)
   {
-    $sql = "INSERT INTO reservas (nombre, cedula, correo, celular, monto, cancha_id, fechahora_reserva, estado, fecha_registro) 
-    VALUES (:nombre, :cedula, :correo, :celular, :monto, :cancha_id, :fechahora_reserva, :estado, :fecha_registro)";
+    $sql = "INSERT INTO reservas (transaccion_id, estado, monto, correo, descripcion, nombre, cedula, celular, cancha_id, fechahora_reserva, fecha_registro) 
+    VALUES (:transaccion_id, :estado, :monto, :correo, :descripcion, :nombre, :cedula, :celular, :cancha_id, :fechahora_reserva, :fecha_registro)";
     $stmt = $this->pdo->prepare($sql);
     $fecha_registro = date('Y-m-d H:i:s');
     $stmt->execute([
+      'transaccion_id' => $transaccion_id,
+      'estado' => $estado,
+      'monto' => $monto,
+      'correo' => $correo,
+      'descripcion' => $descripcion,
       'nombre' => $nombre,
       'cedula' => $cedula,
-      'correo' => $correo,
       'celular' => $celular,
-      'monto' => $monto,
-      'cancha_id' => $cancha,
+      'cancha_id' => $cancha_id,
       'fechahora_reserva' => $fechahora_reserva,
       'estado' => $estado,
       'fecha_registro' => $fecha_registro
@@ -28,21 +31,38 @@ class Reservas
     return "La reserva ha sido creada correctamente";
   }
 
-  // Dentro de Reservas.php
-    public function actualizarReserva($id_reserva, $estado_pago, $transaccion_id) {
-        try {
-            $stmt = $this->pdo->prepare("UPDATE reservas SET estado = ?, transaccion_id = ? WHERE id = ?");
-            $stmt->execute([$estado_pago, $transaccion_id, $id_reserva]);
+  public function crearReservaPayU($nombre,$correo, $monto)
+  {
+    $sql = "INSERT INTO reservas (nombre, correo, monto) 
+    VALUES (:nombre, :correo, :monto)";
+    $stmt = $this->pdo->prepare($sql);
+    // $fecha_registro = date('Y-m-d H:i:s');
+    // $estado = 'Pendiente';
+    $stmt->execute([
+      'nombre' => $nombre,
+      'correo' => $correo,
+      'monto' => $monto
+      // 'estado' => $estado,
+      // 'fecha_registro' => $fecha_registro
+    ]);
+    return "La reserva ha sido creada correctamente";
+  }
 
-            if ($stmt->rowCount()) {
-                return "Reserva actualizada correctamente";
-            } else {
-                return "No se encontró la reserva o no se realizó ningún cambio";
-            }
-        } catch (PDOException $e) {
-            return "Error al actualizar la reserva: " . $e->getMessage();
-        }
-    }
+  // Dentro de Reservas.php
+  public function actualizarReserva($reserva_id, $estado, $transaccion_id) {
+      try {
+          $stmt = $this->pdo->prepare("UPDATE reservas SET estado = ?, transaccion_id = ? WHERE id = ?");
+          $stmt->execute([$estado, $transaccion_id, $reserva_id]);
+
+          if ($stmt->rowCount()) {
+              return "Reserva actualizada correctamente";
+          } else {
+              return "No se encontró la reserva o no se realizó ningún cambio";
+          }
+      } catch (PDOException $e) {
+          return "Error al actualizar la reserva: " . $e->getMessage();
+      }
+  }
 
 
   public function obtener($id)

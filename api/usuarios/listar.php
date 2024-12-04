@@ -4,6 +4,7 @@ require_once '../../Modelo/Usuarios.php';
 
 $usuario = new Usuarios($pdo);
 
+header('Content-Type: application/json');
 if ($usuario->listarUsuarios()) {
     echo json_encode(['status' => 'OK', 'data' => $usuario->listarUsuarios()]);
 } else {

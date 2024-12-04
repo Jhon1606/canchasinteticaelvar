@@ -5,6 +5,7 @@ require_once '../../Modelo/Canchas.php';
 $data = json_decode(file_get_contents('php://input'), true);
 $cancha = new Canchas($pdo);
 
+header('Content-Type: application/json');
 if ($data['nombre']) {
     $message = $cancha->crearCancha($data['nombre']);
     echo json_encode(['status' => 'OK', 'message' => $message]);

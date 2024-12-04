@@ -26,13 +26,60 @@
             font-size: 1.5rem;
             margin-right: 10px;
         }
+
+        .reserve-button {
+            display: block;
+            margin: 10px auto;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .reserve-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Ajustes para dispositivos móviles */
+        @media (max-width: 768px) {
+            /* Reducir el tamaño de los botones en el header */
+            .fc-toolbar button {
+                font-size: 12px; /* Tamaño de fuente más pequeño */
+                padding: 5px; /* Menos espacio alrededor de los botones */
+            }
+
+            /* Reducir el tamaño del texto de la fecha y otros elementos del header */
+            .fc-toolbar-title {
+                font-size: 14px; /* Fuente más pequeña para el título */
+            }
+
+            /* Separar más los botones y el texto del header */
+            .fc-toolbar-chunk {
+                margin-right: 10px; /* Añadir más espacio entre los elementos */
+            }
+
+            /* Ajustar el contenedor del header */
+            .fc-toolbar {
+                flex-wrap: wrap; /* Permite que los elementos se envuelvan en dispositivos pequeños */
+                justify-content: space-between; /* Asegura que haya espacio entre los elementos */
+            }
+            
+            /* Asegurar que el calendario tenga márgenes adecuados */
+            .fc-view-container {
+                margin: 0 5px; /* Ajustar márgenes en dispositivos pequeños */
+            }
+        }
+
+        
     </style>
 </head>
 <body>
     <!-- Navegación -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#"><img src="public/img/escudoelvar.jpg" alt="Logo" width="50"></a>
+            <a class="navbar-brand" href="#"><img src="../public/img/escudoelvar.jpg" alt="Logo" width="50"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -46,15 +93,11 @@
     </nav>
 
     <!-- Sección de Reservas -->
-    <section class="text-white text-center bg-dark" style="background-image: url('public/img/cancha.jpeg'); background-size: cover; background-position: center; padding: 4rem 0;">
+    <section class="text-white text-center bg-dark" style="background-image: url('../public/img/cancha.jpeg'); background-size: cover; background-position: center; padding: 4rem 0;">
         <div class="container">
             <div class="p-4 rounded">
                 <h1 class="display-4"><strong>Reservar Cancha</strong></h1>
                 <p class="lead">Alquila nuestra cancha sintética en Barranquilla y disfruta de un gran partido con amigos.</p>
-                <!-- <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Reservar
-                </button> -->
-                <a href="View/formreservas.php"> <button type="button" class="btn btn-warning">Reservar</button></a>
             </div>
         </div>
     </section>
@@ -63,31 +106,66 @@
     <section class="contacto py-5">
         <div class="container">
             <div class="row justify-content-center">
-                <!-- Información de contacto -->
-                <div class="col-lg-5 mb-4">
-                    <h2>Contáctanos para Reservas</h2>
-                    <p>Reserva tu cancha sintética y disfruta de un buen partido con amigos. ¡Te esperamos en Barranquilla para vivir la experiencia!</p>
-                    <p><strong>Contacto:</strong> 1234567890</p>
-                    <p><strong>Ayuda:</strong> info@canchasinteticaelvar.com</p>
-                </div>
                 
                 <!-- Formulario de contacto -->
-                <div class="col-lg-5">
-                    <form>
-                        <div class="mb-3">
-                            <label for="nombreCliente" class="form-label">Nombre del interesado</label>
-                            <input type="text" class="form-control" id="nombreCliente" placeholder="Ingresa tu nombre aquí" required>
+                <div class="col-lg-8">
+                    <form id="reservaForm" action="../Controlador/agregarReserva.php" method="post">
+                        <div class="modal-body">
+                            <h2 class="h6">Información del cliente</h2>
+                            <p class="mt-1 text-muted">Rellenar todos los campos del formulario para hacer la reserva</p>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" autocomplete="nombre">
+                                    <div id="nombreError" class="text-danger"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cedula" class="form-label">Cédula</label>
+                                    <input type="number" id="cedula" name="cedula" class="form-control" autocomplete="cedula">
+                                    <div id="cedulaError" class="text-danger"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="correo" class="form-label">Correo electrónico</label>
+                                    <input type="email" id="correo" name="correo" class="form-control" autocomplete="email">
+                                    <div id="emailError" class="text-danger"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="celular" class="form-label">Celular</label>
+                                    <input type="number" id="celular" name="celular" class="form-control" autocomplete="celular">
+                                    <div id="celularError" class="text-danger"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="monto" class="form-label">Monto a pagar</label>
+                                    <input type="number" id="monto" name="monto" class="form-control" autocomplete="monto">
+                                    <div id="montoError" class="text-danger"></div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cancha" class="form-label">Cancha</label>
+                                    <select id="cancha_id" name="cancha_id" class="form-select" required>
+                                        <option value="">Selecciona una cancha</option>
+                                    </select>
+                                    <div id="canchaError" class="text-danger"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="selectedDateTime">Fecha y hora seleccionada:</label>
+                                    <input type="text" class="form-control" id="selectedDateTime" name="selectedDateTime" readonly>
+                                    <div id="selectedDateTime" class="text-danger"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="correoCliente" class="form-label">Correo electrónico*</label>
-                            <input type="email" class="form-control" id="correoCliente" placeholder="Ingresa tu correo aquí" required>
+                        <div class="modal-footer mt-4">
+                            <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
                         </div>
-                        <div class="mb-3">
-                            <label for="mensaje" class="form-label">Mensaje o consulta*</label>
-                            <textarea class="form-control" id="mensaje" rows="4" placeholder="Escribe tu mensaje aquí" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-warning btn-block">Enviar consulta</button>
                     </form>
+                <!-- Contenedor del calendario -->
+                <div id="calendar" class="mt-3"></div>
                 </div>
             </div>
         </div>
@@ -109,78 +187,7 @@
             </div>
         </div>
     </section>
-
-    <!-- Modal Reservas
-    <div class="modal modal-lg fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Formulario de Reserva</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <form id="reservaForm" action="Controlador/agregarReserva.php" method="post">
-                    <div class="modal-body">
-                        <h2 class="h6">Información del cliente</h2>
-                        <p class="mt-1 text-muted">Rellenar todos los campos del formulario para hacer la reserva</p>
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" id="nombre" name="nombre" class="form-control" autocomplete="nombre">
-                                <div id="nombreError" class="text-danger"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="cedula" class="form-label">Cédula</label>
-                                <input type="number" id="cedula" name="cedula" class="form-control" autocomplete="cedula">
-                                <div id="cedulaError" class="text-danger"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="correo" class="form-label">Correo electrónico</label>
-                                <input type="email" id="correo" name="correo" class="form-control" autocomplete="email">
-                                <div id="emailError" class="text-danger"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="celular" class="form-label">Celular</label>
-                                <input type="number" id="celular" name="celular" class="form-control" autocomplete="celular">
-                                <div id="celularError" class="text-danger"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="monto" class="form-label">Monto a pagar</label>
-                                <input type="number" id="monto" name="monto" class="form-control" autocomplete="monto">
-                                <div id="montoError" class="text-danger"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="cancha" class="form-label">Cancha</label>
-                                <select id="cancha_id" name="cancha_id" class="form-select" required>
-                                    <option value="">Selecciona una cancha</option>
-                                </select>
-                                <div id="canchaError" class="text-danger"></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="selectedDateTime">Fecha y hora seleccionada:</label>
-                                <input type="text" class="form-control" id="selectedDateTime" name="selectedDateTime" readonly>
-                                <div id="selectedDateTime" class="text-danger"></div>
-                            </div>
-
-                            <-- Contenedor del calendario -->
-                            <!-- <div id="calendar" class="mt-3"></div> -->
-                            
-                        <!-- </div> -->
-                    <!-- </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                    </div> -->
-                <!-- </form> -->
-            <!-- </div> -->
-        <!-- </div> -->
-    <!-- </div> --> 
+        
 
     <!-- Modal de Login -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -264,17 +271,28 @@
     <!-- <script src="public/js/javascript.js"></script> -->
 
     <!-- jQuery y FullCalendar -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.0.0/index.global.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.0.0/index.global.min.js"></script>
 
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
             let visibleDate; // Variable para almacenar la fecha visible actual
+            let reservedSlots = []; // Arreglo para almacenar fechas reservadas
+
+            // Obtener las reservas de la API
+            fetch('http://localhost/canchasintetica/api/reservas/listar.php')
+                .then(response => response.json())
+                .then(data => {
+                    reservedSlots = data.map(reserva => new Date(reserva.fechahora_reserva));
+                })
+                .catch(error => console.error('Error al cargar las reservas:', error));
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridDay',
                 locale: 'es',
+                slotMinTime: "10:00:00",  // Hora mínima a mostrar (10 AM)
+                slotMaxTime: "23:00:00",  // Hora máxima a mostrar (10 PM)
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -285,34 +303,43 @@
                     visibleDate = new Date(info.start); 
                 },
                 slotLabelContent: function (arg) {
-                    // Crear un contenedor0
                     const content = document.createElement('div');
-
-                    // Mostrar la hora en formato amigable
                     const timeLabel = document.createElement('div');
                     timeLabel.innerText = arg.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                    // Crear el botón "Reservar"
-                    const button = document.createElement('button');
-                    button.innerText = 'Reservar';
-                    button.className = 'reserve-button';
+                    // Verificar si el slot está reservado
+                    const isReserved = reservedSlots.some(reservedDate => 
+                        reservedDate.getTime() === arg.date.getTime()
+                    );
 
-                    button.onclick = function () {
-                        // Combinar la fecha visible con la hora del slot
-                        const selectedDateTime = new Date(visibleDate);
-                        selectedDateTime.setHours(arg.date.getHours());
-                        selectedDateTime.setMinutes(arg.date.getMinutes());
+                    if (!isReserved) {
+                        // Crear el botón "Reservar" si no está reservado
+                        const button = document.createElement('button');
+                        button.innerText = 'Reservar';
+                        button.className = 'reserve-button';
 
-                        // Formatear la fecha seleccionada
-                        const formattedDateTime = formatDate(selectedDateTime);
-                        document.getElementById('selectedDateTime').value = formattedDateTime;
-                        alert('Reservado para: ' + formattedDateTime);
-                    };
+                        button.onclick = function () {
+                            // Combinar la fecha visible con la hora del slot
+                            const selectedDateTime = new Date(visibleDate);
+                            selectedDateTime.setHours(arg.date.getHours());
+                            selectedDateTime.setMinutes(arg.date.getMinutes());
 
-                    // Añadir elementos al contenedor
+                            // Formatear la fecha seleccionada
+                            const formattedDateTime = formatDate(selectedDateTime);
+                            document.getElementById('selectedDateTime').value = formattedDateTime;
+                            // alert('Reservado para: ' + formattedDateTime);
+                        };
+
+                        content.appendChild(button);
+                    } else {
+                        // Si está reservado, mostrar un texto
+                        const reservedText = document.createElement('div');
+                        reservedText.innerText = 'Reservado';
+                        reservedText.style.color = 'red';
+                        content.appendChild(reservedText);
+                    }
+
                     content.appendChild(timeLabel);
-                    content.appendChild(button);
-
                     return { domNodes: [content] };
                 }
             });
@@ -328,7 +355,8 @@
                 return `${year}-${month}-${day} ${hours}:${minutes}`;
             }
         });
-    </script> -->
+    </script>
+
 
     <script>
         $(document).ready(function() {
@@ -345,7 +373,7 @@
                             // Agrega cada cancha como una opción en el select
                             $('#cancha_id').append(
                                 $('<option>', {
-                                    value: cancha.nombre, // Usa el campo que represente el nombre
+                                    value: cancha.id, // Usa el campo que represente el nombre
                                     text: cancha.nombre    // Usa el mismo campo para mostrar el nombre
                                 })
                             );

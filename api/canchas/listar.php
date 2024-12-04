@@ -4,6 +4,7 @@ require_once '../../Modelo/Canchas.php';
 
 $cancha = new Canchas($pdo);
 
+header('Content-Type: application/json');
 if ($cancha->listarCanchas()) {
     echo json_encode(['status' => 'OK', 'data' => $cancha->listarCanchas()]);
 } else {

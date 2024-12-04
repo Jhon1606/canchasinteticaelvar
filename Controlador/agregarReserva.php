@@ -1,57 +1,51 @@
 <?php
-require_once '../vendor/autoload.php';
+require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// Datos del formulario
-$data = [
-    'nombre' => $_POST['nombre'],
-    'cedula' => $_POST['cedula'],
-    'email' => $_POST['correo'],
-    'celular' => $_POST['celular'],
-    'monto' => $_POST['monto'],
-    'cancha_id' => $_POST['cancha_id'],
-    'fechahora_reserva' => $_POST['selectedHour']
-];
+// Configuración de tu cuenta PayU
+$apiKey = $_ENV['PAYU_API_KEY'];
+$merchantId = $_ENV['PAYU_MERCHANT_ID'];
+$accountId = $_ENV['PAYU_ACCOUNT_ID'];
+$currency = 'COP'; // Moneda
 
-// Enviar datos a la API de reservas
-$api_url = 'http://localhost/canchasintetica/api/reservas/addReserva.php';
-$options = [
-    'http' => [
-        'header' => "Content-Type: application/json\r\n",
-        'method' => 'POST',
-        'content' => json_encode($data)
-    ]
-];
-$context = stream_context_create($options);
-$response = file_get_contents($api_url, false, $context);
+// Recoger los datos del formulario
+$nombre = $_POST['nombre'];
+$cedula = $_POST['cedula'];
+$correo = $_POST['correo'];
+$celular = $_POST['celular'];
+$monto = $_POST['monto'];
+$cancha_id = $_POST['cancha_id'];
+$fechahora_reserva = $_POST['selectedDateTime'];
+$referenceCode = 'reserva_' . uniqid(); // Generar referencia única
 
-// Si la reserva se realizó correctamente, redirigir al formulario de PayU
-if ($response !== FALSE) {
-    // Variables para PayU
-    $payu_data = [
-        'merchantId' => $_ENV['PAYU_MERCHANT_ID'],
-        'accountId' => $_ENV['PAYU_ACCOUNT_ID'],
-        'description' => 'Reserva de cancha',
-        'referenceCode' => uniqid(),
-        'amount' => $data['monto'],
-        'currency' => 'COP',
-        'buyerEmail' => $data['email'],
-        'responseUrl' => 'https://30be-167-0-212-32.ngrok-free.app/canchasintetica/Controlador/payuCallback.php',
-        'confirmationUrl' => 'https://30be-167-0-212-32.ngrok-free.app/canchasintetica/Controlador/payuCallback.php',
-        'signature' => hash('md5', $_ENV['PAYU_API_KEY'] . "~" . $_ENV['PAYU_MERCHANT_ID'] . "~" . uniqid() . "~" . $data['monto'] . "~COP")
-    ];
+// Generar la firma requerida por PayU
+$signature = md5($apiKey . '~' . $merchantId . '~' . $referenceCode . '~' . $monto . '~' . $currency);
 
-    // Redirigir al formulario de PayU
-    $payu_url = $_ENV['PAYU_SANDBOX_URL']; // Cambia a $_ENV['PAYU_PRODUCTION_URL'] en producción
-    echo '<form id="payuForm" action="' . $payu_url . '" method="POST">';
-    foreach ($payu_data as $key => $value) {
-        echo "<input type='hidden' name='$key' value='$value'>";
-    }
-    echo '</form>';
-    echo '<script>document.getElementById("payuForm").submit();</script>';
-} else {
-    echo 'Error al realizar la reserva. Inténtalo de nuevo.';
-}
+// Redirigir al formulario de PayU
+$payuFormUrl = 'https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/';
+
+echo "<form action='$payuFormUrl' method='POST' id='payuForm'>
+        <input name='merchantId' type='hidden' value='$merchantId'>
+        <input name='accountId' type='hidden' value='$accountId'>
+        <input name='description' type='hidden' value='Reserva de cancha'>
+        <input name='referenceCode' type='hidden' value='$referenceCode'>
+        <input name='amount' type='hidden' value='$monto'> <!-- Cambiado de monto a amount -->
+        <input name='tax' type='hidden' value='0'>
+        <input name='taxReturnBase' type='hidden' value='0'>
+        <input name='currency' type='hidden' value='$currency'>
+        <input name='signature' type='hidden' value='$signature'>
+        <input name='buyerEmail' type='hidden' value='$correo'> <!-- Cambiado de correo a buyerEmail -->
+        <input name='test' type='hidden' value='1'> <!-- 1 para sandbox -->
+        <input name='responseUrl' type='hidden' value='http://localhost/canchasintetica/respuesta.php'>
+        <input name='confirmationUrl' type='hidden' value='http://localhost/canchasintetica/confirmacion.php'>
+        <!-- Campos personalizados -->
+        <input name='extra1' type='hidden' value='$nombre'>
+        <input name='extra2' type='hidden' value='$cedula'>
+        <input name='extra3' type='hidden' value='$celular'>
+        <input name='extra4' type='hidden' value='$cancha_id'>
+        <input name='extra5' type='hidden' value='$fechahora_reserva'>
+        <script>document.getElementById('payuForm').submit();</script>
+      </form>";
 ?>

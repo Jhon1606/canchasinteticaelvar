@@ -4,6 +4,7 @@ require_once '../../Modelo/Reservas.php';
 
 $reserva = new Reservas($pdo);
 
+header('Content-Type: application/json');
 if ($reserva->listarReservas()) {
     echo json_encode(['status' => 'OK', 'data' => $reserva->listarReservas()]);
 } else {

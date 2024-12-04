@@ -6,6 +6,7 @@ require_once '../../Modelo/Usuarios.php';
 $data = json_decode(file_get_contents('php://input'), true);
 $usuarios = new Usuarios($pdo);
 
+header('Content-Type: application/json');
 if (isset($data['email']) && isset($data['password'])) {
     $result = $usuarios->validarUsuario($data['email'], $data['password']);
     
